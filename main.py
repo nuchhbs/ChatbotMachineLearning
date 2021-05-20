@@ -3,9 +3,9 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import torch
+import torch 
 from torch.jit import script, trace
-import torch.nn as nn
+import torch.nn as nn 
 from torch import optim
 import torch.nn.functional as F
 import csv
@@ -35,8 +35,6 @@ def printLines(file, n=10):
 printLines(os.path.join(corpus, "movie_lines.txt"))
 
 # Splits each line of the file into a dictionary of fields
-
-
 def loadLines(fileName, fields):
     lines = {}
     with open(fileName, 'r', encoding='iso-8859-1') as f:
@@ -50,8 +48,6 @@ def loadLines(fileName, fields):
     return lines
 
 # Groups fields of lines from `loadLines` into conversations based on *movie_conversations.txt*
-
-
 def loadConversations(fileName, lines, fields):
     conversations = []
     with open(fileName, 'r', encoding='iso-8859-1') as f:
@@ -178,10 +174,6 @@ class Voc:
 
 MAX_LENGTH = 10  # Maximum sentence length to consider
 
-# Turn a Unicode string to plain ASCII, thanks to
-# https://stackoverflow.com/a/518232/2809427
-
-
 def unicodeToAscii(s):
     return ''.join(
         c for c in unicodedata.normalize('NFD', s)
@@ -189,8 +181,6 @@ def unicodeToAscii(s):
     )
 
 # Lowercase, trim, and remove non-letter characters
-
-
 def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
     s = re.sub(r"([.!?])", r" \1", s)
@@ -199,8 +189,6 @@ def normalizeString(s):
     return s
 
 # Read query/response pairs and return a voc object
-
-
 def readVocs(datafile, corpus_name):
     print("Reading lines...")
     # Read the file and split into lines
@@ -212,21 +200,15 @@ def readVocs(datafile, corpus_name):
     return voc, pairs
 
 # Returns True iff both sentences in a pair 'p' are under the MAX_LENGTH threshold
-
-
 def filterPair(p):
     # Input sequences need to preserve the last word for EOS token
     return len(p[0].split(' ')) < MAX_LENGTH and len(p[1].split(' ')) < MAX_LENGTH
 
 # Filter pairs using filterPair condition
-
-
 def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
 # Using the functions defined above, return a populated voc object and pairs list
-
-
 def loadPrepareData(corpus, corpus_name, datafile, save_dir):
     print("Start preparing training data ...")
     voc, pairs = readVocs(datafile, corpus_name)
